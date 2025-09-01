@@ -19,11 +19,6 @@ export interface ISubscription extends mongoose.Document {
 
 const SubscriptionSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     stripeSubscriptionId: {
       type: String,
       required: true,

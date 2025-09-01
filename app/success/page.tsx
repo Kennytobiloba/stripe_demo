@@ -1,50 +1,35 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { CheckCircle } from "lucide-react"
-import Link from "next/link"
-
+// app/success/page.tsx
 interface SuccessPageProps {
-  searchParams: {
-    session_id?: string
-  }
+  searchParams: Promise<{ session_id?: string }>
 }
 
-export default function SuccessPage({ searchParams }: SuccessPageProps) {
-  const sessionId = searchParams.session_id
+export default async function SuccessPage({ searchParams }: SuccessPageProps) {
+  const params = await searchParams
+  const sessionId = params.session_id
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-      <Card className="max-w-md w-full">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-            <CheckCircle className="w-8 h-8 text-green-600 dark:text-green-400" />
-          </div>
-          <CardTitle className="text-2xl text-green-800 dark:text-green-200">Payment Successful!</CardTitle>
-          <CardDescription>
-            Thank you for your subscription. Your payment has been processed successfully.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {sessionId && (
-            <div className="bg-muted p-3 rounded-lg">
-              <p className="text-sm font-medium mb-1">Session ID:</p>
-              <p className="text-xs font-mono break-all text-muted-foreground">{sessionId}</p>
-            </div>
-          )}
+      <div className="bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-10 max-w-lg text-center">
+        <h1 className="text-4xl font-extrabold text-green-600 dark:text-green-400 mb-4">
+          🎉 Payment Successful!
+        </h1>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          Thank you for your support. Your payment was processed successfully.
+        </p>
 
-          <div className="space-y-2 text-sm text-muted-foreground">
-            <p>• You will receive a confirmation email shortly</p>
-            <p>• Your subscription is now active</p>
-            <p>• You can manage your subscription in your account</p>
-          </div>
+        {sessionId && (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Stripe Session ID: <span className="font-mono">{sessionId}</span>
+          </p>
+        )}
 
-          <div className="pt-4">
-            <Link href="/">
-              <Button className="w-full">Return to Home</Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+        <a
+          href="/"
+          className="mt-8 inline-block px-6 py-3 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition"
+        >
+          Go back home
+        </a>
+      </div>
     </div>
   )
 }
