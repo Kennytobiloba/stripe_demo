@@ -32,8 +32,8 @@ export async function POST(req: Request) {
         },
       ],
       customer_email: body.email,
-      success_url: "http://localhost:3002/success",
-      cancel_url: "http://localhost:3002/cancel",
+      success_url: "https://stripe-demo-tan.vercel.app/success",
+      cancel_url: "https://stripe-demo-tan.vercel.app/cancel",
     });
 
   
