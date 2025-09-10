@@ -10,8 +10,8 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
   await connectDB();
-    console.log("⚡ Webhook endpoint called"); // 👈 first log
-      console.log("✅ Connected to MongoDB"); // 👈 check DB connection
+  console.log("⚡ Webhook endpoint called");
+  console.log("✅ Connected to MongoDB");
 
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -21,14 +21,13 @@ export async function POST(req: Request) {
   try {
     event = stripe.webhooks.constructEvent(body, sig!, webhookSecret);
   } catch (err: any) {
-    console.error("❌ Webhook signature verification failed:", err);
+    console.error(" Webhook signature verification failed:", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    // Get subscription details if available
     let subscription: Stripe.Subscription | null = null;
     if (session.subscription) {
       subscription = await stripe.subscriptions.retrieve(
@@ -36,23 +35,19 @@ export async function POST(req: Request) {
       );
     }
 
-    // Save payment into MongoDB
     const payment = new Payment({
       userId: session.metadata?.userId || null,
       email: session.customer_email,
-      amount_total: session.amount_total,
+      amount: session.amount_total, 
       currency: session.currency,
-      payment_status: session.payment_status,
+      paymentStatus: session.payment_status,
       subscriptionId: subscription?.id,
-      current_period_start: subscription
-        ? (subscription as any).current_period_start
-        : null,
-      current_period_end: subscription
-        ? (subscription as any).current_period_end
-        : null,
+      currentPeriodStart: subscription ? new Date((subscription as any).current_period_start * 1000) : null, 
+      currentPeriodEnd: subscription ? new Date((subscription as any).current_period_end * 1000) : null,     
     });
 
-    await payment.save();
+
+     await payment.save();
     console.log("💾 Payment saved:", payment);
   }
 
