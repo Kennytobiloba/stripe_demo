@@ -22,11 +22,12 @@ export default function HomePage() {
     const paymentMethod = formData[productType].method
 
     if (!email) {
-      toast({
-        title: "Email Required",
-        description: "Please enter your email address",
-        variant: "destructive",
-      })
+      alert("Please enter your email address")
+      // toast({
+      //   title: "Email Required",
+      //   description: "Please enter your email address",
+      //   variant: "destructive",
+      // })
       return
     }
 

@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         tx_ref,
         amount,
         currency: "USD", 
-        redirect_url: "http://localhost:3002/success", 
+        redirect_url: "https://stripe-demo-git-main-kennytobilobas-projects.vercel.app/success", 
         customer: {
           email,
         },

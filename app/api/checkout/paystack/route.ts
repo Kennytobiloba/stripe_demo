@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         email,
         amount,
-        callback_url: "http://localhost:3002/success", 
+        callback_url: "https://stripe-demo-git-main-kennytobilobas-projects.vercel.app/success", 
       }),
     })
 
